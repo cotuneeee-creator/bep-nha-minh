@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Bếp Nhà Mình - Nấu ngon mỗi ngày</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<style>
+:root{
+  --cream:#FFF8F0; --orange:#FF7A45; --terracotta:#D86A42; --brown:#4A2C1D; --green:#2E7D32;
+  --bg:#FFFBF5; --card:#FFFFFF; --muted:#8D6E63; --line:#F2E6D9; --shadow:0 8px 30px rgba(74,44,29,.08);
+  --radius:20px;
+}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--brown);font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; line-height:1.6}
+a{color:inherit;text-decoration:none} button{font-family:inherit;cursor:pointer}
+.header{position:sticky;top:0;z-index:20;background:rgba(255,251,245,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.header-inner{max-width:1280px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:20px}
+.logo-badge{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,var(--orange),var(--terracotta));display:grid;place-items:center;color:white}
+.nav{display:flex;gap:8px}
+.nav button{border:1px solid var(--line);background:white;padding:8px 14px;border-radius:999px;font-weight:600}
+.nav button.active{background:var(--brown);color:white;border-color:var(--brown)}
+.hero{max-width:1280px;margin:0 auto;padding:32px 20px 10px;display:grid;grid-template-columns:1.2fr .8fr;gap:24px}
+@media(max-width:900px){.hero{grid-template-columns:1fr}}
+.hero-card{background:linear-gradient(135deg,#FFF1E6,#FFE8D6);border:1px solid var(--line);border-radius:28px;padding:28px;box-shadow:var(--shadow)}
+.hero h1{font-size: clamp(28px,4vw,44px);line-height:1.1;margin:0 0 10px;letter-spacing:-.02em}
+.search-wrap{margin-top:16px;display:flex;gap:10px}
+.search-wrap input{flex:1;padding:16px 18px;border-radius:999px;border:1.5px solid var(--line);background:white;outline:none;font-size:16px}
+.search-wrap input:focus{border-color:var(--orange)}
+.btn{border:none;border-radius:999px;padding:12px 18px;font-weight:700}
+.btn-primary{background:var(--brown);color:white} .btn-orange{background:var(--orange);color:white}
+.btn-ghost{background:white;border:1px solid var(--line)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.chip{padding:8px 14px;border-radius:999px;border:1px solid var(--line);background:white;font-weight:600;font-size:14px}
+.chip.active{background:var(--orange);color:white;border-color:var(--orange)}
+.tools{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.tool{background:white;border:1px solid var(--line);border-radius:20px;padding:16px;box-shadow:var(--shadow)}
+.tool h4{margin:0 0 6px}
+.container{max-width:1280px;margin:0 auto;padding:10px 20px 80px}
+.filters{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0;padding:14px;background:white;border:1px solid var(--line);border-radius:16px}
+.filters select{padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:white}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:1024px){.grid{grid-template-columns:repeat(2,1fr)}} @media(max-width:600px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:transform .2s, box-shadow .2s}
+.card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(74,44,29,.14)}
+.card-img{height:180px;background:linear-gradient(135deg,#FFF0E0,#FFE0C0);display:grid;place-items:center;font-size:64px;position:relative}
+.badge{position:absolute;left:12px;bottom:12px;display:flex;gap:6px}
+.badge span{background:rgba(255,255,255,.9);backdrop-filter:blur(6px);padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;border:1px solid var(--line)}
+.fav-btn{position:absolute;right:12px;top:12px;width:38px;height:38px;border-radius:999px;border:1px solid var(--line);background:white;display:grid;place-items:center;font-size:18px}
+.card-body{padding:14px 16px}
+.card-body h3{margin:0 0 4px;font-size:18px} .meta{color:var(--muted);font-size:13px;display:flex;gap:10px;flex-wrap:wrap}
+.tags{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap} .tags span{font-size:11px;background:#FFF1E6;border:1px solid var(--line);padding:3px 8px;border-radius:999px}
+.modal{position:fixed;inset:0;background:rgba(40,20,10,.45);display:none;z-index:50;padding:20px;overflow:auto}
+.modal.open{display:grid;place-items:start center}
+.modal-box{width:min(980px,100%);background:white;border-radius:28px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.25);margin-top:20px}
+.modal-head{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}
+.detail{display:grid;grid-template-columns:380px 1fr} @media(max-width:900px){.detail{grid-template-columns:1fr}}
+.detail-left{padding:20px;border-right:1px solid var(--line)} .detail-right{padding:20px}
+.ing{border:1px dashed var(--line);border-radius:16px;padding:12px} .ing-item{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--line)}
+.step{counter-increment:step;display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line)} .step:before{content:counter(step);width:32px;height:32px;border-radius:999px;background:var(--brown);color:white;display:grid;place-items:center;font-weight:800;flex-shrink:0}
+.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--brown);color:white;padding:12px 18px;border-radius:999px;box-shadow:var(--shadow);display:none;z-index:80}
+.toast.show{display:block}
+.empty{padding:40px;text-align:center;color:var(--muted)}
+.progress{height:8px;background:var(--line);border-radius:999px;overflow:hidden} .progress>div{height:100%;background:var(--green);width:0%}
+.fridge-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px} @media(max-width:600px){.fridge-grid{grid-template-columns:repeat(2,1fr)}}
+.fridge-item{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:white;display:flex;justify-content:space-between;align-items:center}
+.fridge-item.active{border-color:var(--green);background:#E8F5E9}
+.skeleton{animation:pulse 1.2s infinite} @keyframes pulse{0%{opacity:.6}50%{opacity:1}100%{opacity:.6}}
+</style>
+</head>
+<body>
+<header class="header"><div class="header-inner">
+<div class="logo"><div class="logo-badge">🍲</div><div>BẾP NHÀ MÌNH<br><small style="font-weight:600;color:var(--muted);font-size:12px">Nấu ngon mỗi ngày – Công thức dễ làm cho gia đình Việt</small></div></div>
+<nav class="nav">
+<button class="active" data-nav="recipes">Công thức</button>
+<button data-nav="fav">❤️ Yêu thích <span id="favCount"></span></button>
+<button data-nav="shop">🛒 Đi chợ <span id="shopCount"></span></button>
+<button data-nav="history">🕘 Lịch sử</button>
+</nav>
+</div></header>
+
+<div class="hero">
+<div class="hero-card">
+<h1>Hôm nay mình nấu món gì?</h1>
+<p style="color:var(--muted);margin:0">Tìm món theo tên, nguyên liệu, tag. 30+ công thức thuần Việt, hoạt động offline 100%.</p>
+<div class="search-wrap"><input id="searchInput" placeholder="Tìm món ăn, nguyên liệu... ví dụ: trứng, cà chua, gà"/><button class="btn btn-orange" id="randomBtn">🎲 Hôm nay ăn gì?</button></div>
+<div class="chips" id="categoryChips"></div>
+</div>
+<div class="tools">
+<div class="tool"><h4>🧊 Tủ lạnh có gì?</h4><p style="margin:0 0 10px;color:var(--muted);font-size:13px">Chọn nguyên liệu đang có, gợi ý món phù hợp 100% - 50%</p><button class="btn btn-ghost" id="openFridge">Mở tủ lạnh</button></div>
+<div class="tool"><h4>🔥 Món nhanh</h4><p style="margin:0 0 10px;color:var(--muted);font-size:13px">Lọc món dưới 30 phút cho bữa tối bận rộn</p><button class="btn btn-ghost" onclick="setQuickFilter('time',30)">Lọc &lt;30 phút</button></div>
+<div class="tool"><h4>❤️ Yêu thích</h4><p style="margin:0 0 10px;color:var(--muted);font-size:13px">Lưu món bạn thích, random trong list yêu thích</p><button class="btn btn-ghost" id="randomFavBtn">🎲 Random yêu thích</button></div>
+<div class="tool"><h4>🛒 Đi chợ</h4><div class="progress" style="margin:8px 0"><div id="shopProgress"></div></div><small id="shopProgressText">Đã mua 0/0</small><div style="margin-top:10px"><button class="btn btn-ghost" id="openShop">Xem danh sách</button></div></div>
+</div>
+</div>
+
+<div class="container">
+<div class="filters">
+<select id="filterCategory"><option value="">Tất cả danh mục</option></select>
+<select id="filterTime"><option value="">Thời gian</option><option value="15"><15 phút</option><option value="30"><30 phút</option><option value="60"><60 phút</option><option value="61">>60 phút</option></select>
+<select id="filterDiff"><option value="">Độ khó</option><option>Rất dễ</option><option>Dễ</option><option>Trung bình</option><option>Khó</option></select>
+<select id="filterPrice"><option value="">Chi phí</option><option>Tiết kiệm</option><option>Bình dân</option><option>Cao</option></select>
+<button class="btn btn-ghost" id="clearFilters">Xóa lọc</button>
+<span id="resultCount" style="margin-left:auto;color:var(--muted);font-size:13px"></span>
+</div>
+<div id="grid" class="grid"></div>
+<div id="empty" class="empty" style="display:none">Không tìm thấy món nào. Thử xóa bộ lọc hoặc tìm từ khóa khác nhé.</div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="modal" id="detailModal"><div class="modal-box">
+<div class="modal-head"><strong id="detailTitle"></strong><button class="btn btn-ghost" onclick="closeModal('detailModal')">✕</button></div>
+<div class="detail">
+<div class="detail-left">
+<div style="font-size:80px;text-align:center" id="detailEmoji"></div>
+<div id="detailMeta" style="color:var(--muted);font-size:13px;text-align:center;margin:8px 0"></div>
+<div class="ing"><strong>Nguyên liệu - <span id="detailServings"></span></strong><div id="detailIng"></div><button class="btn btn-orange" style="width:100%;margin-top:12px" id="addAllShop">🛒 Thêm tất cả vào đi chợ</button></div>
+<div style="margin-top:14px" id="detailTools"></div>
+<div style="margin-top:14px" id="detailTips"></div>
+</div>
+<div class="detail-right">
+<p id="detailDesc" style="color:var(--muted)"></p>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin:10px 0">
+<button class="btn btn-ghost" id="favToggle">❤️ Yêu thích</button>
+<button class="btn btn-ghost" id="copyRecipe">📋 Sao chép công thức</button>
+</div>
+<h3>Các bước nấu</h3>
+<div id="detailSteps" style="counter-reset:step"></div>
+</div>
+</div>
+</div></div>
+
+<!-- FRIDGE MODAL -->
+<div class="modal" id="fridgeModal"><div class="modal-box" style="max-width:720px">
+<div class="modal-head"><strong>🧊 Tủ lạnh có gì?</strong><button class="btn btn-ghost" onclick="closeModal('fridgeModal')">✕</button></div>
+<div style="padding:20px"><p style="color:var(--muted)">Chọn nguyên liệu bạn đang có, mình sẽ gợi ý món khớp nhất.</p><div class="fridge-grid" id="fridgeGrid"></div><div style="margin-top:16px;display:flex;gap:8px"><button class="btn btn-primary" id="applyFridge">Áp dụng</button><button class="btn btn-ghost" id="clearFridge">Xóa hết</button></div></div>
+</div></div>
+
+<!-- SHOPPING MODAL -->
+<div class="modal" id="shopModal"><div class="modal-box" style="max-width:640px">
+<div class="modal-head"><strong>🛒 Danh sách đi chợ</strong><button class="btn btn-ghost" onclick="closeModal('shopModal')">✕</button></div>
+<div style="padding:20px"><div id="shopList"></div><div style="display:flex;gap:8px;margin-top:14px"><button class="btn btn-ghost" id="clearShop">Xóa hết</button><button class="btn btn-ghost" id="copyShop">📋 Copy list</button></div></div>
+</div></div>
+
+<!-- HISTORY MODAL -->
+<div class="modal" id="historyModal"><div class="modal-box" style="max-width:640px">
+<div class="modal-head"><strong>🕘 Lịch sử đã xem</strong><button class="btn btn-ghost" onclick="closeModal('historyModal')">✕</button></div>
+<div style="padding:20px" id="historyList"></div>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== DATA - 32 món Việt =====
+const RECIPES = [
+{id:"trung-chien-ca-chua",name:"Trứng Chiên Cà Chua",category:"Món mặn",description:"Món quốc dân 10 phút, chua ngọt đưa cơm, ai cũng làm được.",emoji:"🍳",cookingTime:15,difficulty:"Rất dễ",servings:2,calories:220,priceLevel:"Tiết kiệm",tags:["trứng","cà chua","nhanh","10 phút"],ingredients:[{name:"Trứng gà",qty:"3 quả",key:"trứng"},{name:"Cà chua",qty:"2 quả",key:"cà chua"},{name:"Hành lá",qty:"1 nhánh",key:"hành"},{name:"Nước mắm",qty:"1 muỗng",key:"nước mắm"}],steps:["Cà chua thái múi cau, hành lá thái nhỏ.","Đánh trứng với nước mắm, tiêu.","Phi hành, cho cà chua xào mềm, đổ trứng vào chiên lửa vừa, đảo nhẹ.","Khi trứng se lại rắc hành, tắt bếp."],tips:["Không chiên quá lâu trứng sẽ khô."],tools:["Chảo"]},
+{id:"thit-kho-tau",name:"Thịt Kho Tàu",category:"Món kho",description:"Thịt ba rọi kho mềm với trứng vịt, nước dừa đậm đà ngày Tết.",emoji:"🍖",cookingTime:90,difficulty:"Trung bình",servings:4,calories:450,priceLevel:"Bình dân",tags:["thịt heo","trứng","kho","nước dừa"],ingredients:[{name:"Thịt ba rọi",qty:"500g",key:"thịt heo"},{name:"Trứng vịt",qty:"4 quả",key:"trứng"},{name:"Nước dừa",qty:"500ml",key:"nước dừa"},{name:"Nước mắm",qty:"3 muỗng",key:"nước mắm"}],steps:["Thịt cắt vuông, ướp nước mắm, đường, tỏi 30p.","Trứng luộc bóc vỏ.","Thắng nước màu, cho thịt vào săn, đổ nước dừa ngập thịt.","Kho liu riu 60p, cho trứng vào kho thêm 20p."],tips:["Kho 2 lửa sẽ mềm ngon hơn."],tools:["Nồi"]},
+{id:"canh-chua-ca-loc",name:"Canh Chua Cá Lóc",category:"Món canh",description:"Chua thanh từ me, thơm dứa, cá lóc ngọt thịt.",emoji:"🐟",cookingTime:30,difficulty:"Dễ",servings:3,calories:180,priceLevel:"Bình dân",tags:["cá","canh chua","me"],ingredients:[{name:"Cá lóc",qty:"400g",key:"cá"},{name:"Cà chua",qty:"2 quả",key:"cà chua"},{name:"Dứa",qty:"1/4 quả",key:"dứa"},{name:"Me chua",qty:"30g",key:"me"}],steps:["Cá làm sạch cắt khúc, ướp muối.","Me dầm lấy nước chua.","Nấu nước sôi, cho me, dứa, cà chua, sau đó cho cá.","Nêm chua ngọt, thêm rau ngổ, ngò gai."],tips:["Không nấu cá quá lâu."],tools:["Nồi"]},
+{id:"rau-muong-xao-toi",name:"Rau Muống Xào Tỏi",category:"Món xào",description:"Giòn xanh, thơm tỏi, 5 phút xong.",emoji:"🥬",cookingTime:10,difficulty:"Rất dễ",servings:2,calories:90,priceLevel:"Tiết kiệm",tags:["rau muống","xào","chay"],ingredients:[{name:"Rau muống",qty:"1 bó",key:"rau muống"},{name:"Tỏi",qty:"1 củ",key:"tỏi"},{name:"Dầu ăn",qty:"2 muỗng",key:"dầu"}],steps:["Rau nhặt, rửa sạch, để ráo.","Tỏi đập dập.","Phi tỏi thơm, cho rau vào xào lửa lớn 2-3 phút.","Nêm nước mắm, tắt bếp."],tips:["Xào lửa lớn rau mới xanh."],tools:["Chảo"]},
+{id:"ga-kho-gung",name:"Gà Kho Gừng",category:"Món kho",description:"Gà ta kho gừng ấm bụng, thơm nức.",emoji:"🍗",cookingTime:40,difficulty:"Dễ",servings:3,calories:320,priceLevel:"Bình dân",tags:["gà","gừng","kho"],ingredients:[{name:"Thịt gà",qty:"500g",key:"gà"},{name:"Gừng",qty:"1 nhánh",key:"gừng"},{name:"Hành tím",qty:"2 củ",key:"hành"}],steps:["Gà chặt miếng ướp mắm, tiêu.","Gừng thái sợi.","Phi hành, cho gừng, gà vào xào săn.","Thêm nước, kho 25p."],tips:["Dùng gà ta ngon hơn."],tools:["Chảo sâu"]},
+{id:"ca-kho-to",name:"Cá Lóc Kho Tộ",category:"Món kho",description:"Kho tộ đậm đà, keo lại, ăn với cơm nóng.",emoji:"🐠",cookingTime:45,difficulty:"Trung bình",servings:2,calories:280,priceLevel:"Bình dân",tags:["cá","kho tộ"],ingredients:[{name:"Cá lóc",qty:"400g",key:"cá"},{name:"Thịt ba rọi",qty:"100g",key:"thịt heo"},{name:"Nước mắm",qty:"3 muỗng",key:"nước mắm"}],steps:["Cá ướp mắm đường 20p.","Thắng nước màu, xếp thịt, cá vào tộ.","Kho lửa nhỏ 30p đến khi nước sệt."],tips:["Kho tộ đất sẽ thơm."],tools:["Tộ đất"]},
+{id:"bo-xao-rau-muong",name:"Bò Xào Rau Muống",category:"Món xào",description:"Thịt bò mềm, rau muống giòn.",emoji:"🥩",cookingTime:15,difficulty:"Dễ",servings:2,calories:250,priceLevel:"Cao",tags:["thịt bò","rau muống"],ingredients:[{name:"Thịt bò",qty:"250g",key:"thịt bò"},{name:"Rau muống",qty:"1 bó",key:"rau muống"},{name:"Tỏi",qty:"1 củ",key:"tỏi"}],steps:["Bò thái mỏng ướp tỏi, dầu hào.","Rau muống chần sơ.","Xào bò lửa lớn 1p lấy ra, xào rau, cho bò vào lại."],tips:["Bò xào nhanh kẻo dai."],tools:["Chảo"]},
+{id:"dau-hu-chien",name:"Đậu Hũ Chiên Giòn",category:"Món chiên",description:"Vỏ giòn, trong mềm, chấm mắm tỏi.",emoji:"🧈",cookingTime:15,difficulty:"Rất dễ",servings:2,calories:200,priceLevel:"Tiết kiệm",tags:["đậu hũ","chiên","chay"],ingredients:[{name:"Đậu hũ",qty:"3 miếng",key:"đậu hũ"},{name:"Dầu ăn",qty:"đủ chiên",key:"dầu"}],steps:["Đậu cắt miếng, thấm khô.","Chiên vàng đều các mặt."],tips:["Thấm khô đậu mới giòn."],tools:["Chảo"]},
+{id:"bun-cha-ha-noi",name:"Bún Chả Hà Nội",category:"Món nướng",description:"Chả nướng than hoa, nước mắm chua ngọt.",emoji:"🍢",cookingTime:60,difficulty:"Trung bình",servings:3,calories:550,priceLevel:"Bình dân",tags:["thịt heo","bún","nướng"],ingredients:[{name:"Thịt ba rọi",qty:"400g",key:"thịt heo"},{name:"Bún",qty:"500g",key:"bún"},{name:"Đu đủ xanh",qty:"100g",key:"đu đủ"}],steps:["Thịt ướp hành, mắm, đường, nướng vàng.","Pha nước mắm chua ngọt, thả đu đủ.","Ăn với bún, rau sống."],tips:["Nướng than sẽ thơm nhất."],tools:["Vỉ nướng"]},
+{id:"pho-bo",name:"Phở Bò",category:"Món nước",description:"Nước dùng trong, thơm quế hồi, bò mềm.",emoji:"🍜",cookingTime:180,difficulty:"Khó",servings:4,calories:480,priceLevel:"Cao",tags:["thịt bò","phở","nước"],ingredients:[{name:"Xương bò",qty:"1kg",key:"thịt bò"},{name:"Thịt bò",qty:"400g",key:"thịt bò"},{name:"Bánh phở",qty:"500g",key:"phở"}],steps:["Hầm xương 2h với quế, hồi, gừng nướng.","Thịt bò thái mỏng.","Trụng phở, chan nước dùng, thêm bò."],tips:["Nướng gừng hành cho thơm."],tools:["Nồi lớn"]},
+{id:"com-tam-suon",name:"Cơm Tấm Sườn",category:"Món mặn",description:"Sườn ướp mật ong nướng, mỡ hành, đồ chua.",emoji:"🍛",cookingTime:50,difficulty:"Trung bình",servings:2,calories:600,priceLevel:"Bình dân",tags:["thịt heo","cơm tấm"],ingredients:[{name:"Sườn cốt lết",qty:"2 miếng",key:"thịt heo"},{name:"Cơm tấm",qty:"400g",key:"gạo"},{name:"Trứng",
